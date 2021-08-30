@@ -1,4 +1,4 @@
-Gif image search using Giphy
+<h><b>Gif image search using Giphy</b></h>
 
  The app provides the user to search gifs using Giphy API.
 

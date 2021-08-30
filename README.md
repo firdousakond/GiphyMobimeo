@@ -1,31 +1,33 @@
-<h><b>Gif image search using Giphy</b></h>
+<pre>
+<span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:18px"><strong>GIF image search using Giphy API</strong></span></span>
 
- The app provides the user to search gifs using Giphy API.
+ <span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:12px">The app provides the user to search gifs using Giphy API.</span></span>
 
-Supported OS: Android 6 (API 23) - Android 11 (API 30)
+<strong><span style="font-size:12px"><span style="font-family:Arial,Helvetica,sans-serif">Supported OS: Android 6 (API 23) - Android 11 (API 30)</span></span></strong>
 
-Design Consideration (MVVM + Coroutine + Paging)
+<span style="font-family:Arial,Helvetica,sans-serif"><strong><span style="font-size:14px">Design Consideration (MVVM + Coroutine + Paging)
+</span></strong></span>
+<span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:12px"><strong>The code consist of 5 vital elements:</strong></span></span>
 
-The code consist of 5 vital elements:
+<span style="font-size:12px">1st - <strong>View</strong> - Activity and Fragment Navigation. It handles the UI interactions.
+2nd - <strong>ViewModel</strong> - Manages View interaction and data flow.
+3rd - <strong>Model</strong> - Data content
+4th - <strong>Paging Source</strong> - Fetches data from API and emits a stream of data
+5th - <strong>Test Cases</strong> - Mockito Test covers the ViewModel and Paging Source and Espresso used for testing the UI.</span>
 
-1st - View - Activity and Fragment Navigation. It handles the UI interactions.
-2nd - ViewModel - Manages View interaction and data flow.
-3rd - Model - Data content
-4th - Paging Source - Fetches data from API and emits a stream of data
-5th - Test Cases - Mockito Test covers the ViewModel and Paging Source and Espresso used for testing the UI.
+<strong><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Application Design</span></span></strong>
 
-Application Design
+<span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:12px"><strong>Giphy Search</strong></span></span>  
 
-Giphy Search  
-
-- User search gif
+<span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:12px">- User search gif
 - Gif list shows in gridView
-- User can click any item to see a detailed view 
+- User can click any item to see a detailed view</span></span> 
 
-Giphy Details 
+<span style="font-size:12px"><span style="font-family:Arial,Helvetica,sans-serif"><strong>Giphy Details </strong></span></span>
 
-- Gif image shows fullscreen with title
-
-
+<span style="font-family:Arial,Helvetica,sans-serif"><span style="font-size:12px">- Gif image shows fullscreen with title</span></span>
 
 
+
+
+</pre>

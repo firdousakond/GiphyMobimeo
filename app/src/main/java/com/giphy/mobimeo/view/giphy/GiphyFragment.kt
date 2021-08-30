@@ -22,6 +22,7 @@ import com.giphy.mobimeo.viewmodel.GiphyViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
 class GiphyFragment : Fragment(), GiphyPagerAdapter.GifItemClickListener {
@@ -45,17 +46,11 @@ class GiphyFragment : Fragment(), GiphyPagerAdapter.GifItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeList()
+        observePageLoadState()
         setListeners()
     }
 
-    private fun initializeList() {
-        val gridLayoutManager = GridLayoutManager(requireContext(),2)
-        binding.rvGif.apply {
-            layoutManager = gridLayoutManager
-            adapter =  giphyAdapter.withLoadStateFooter(
-                footer = GiphyLoadAdapter(giphyAdapter::retry)
-            )
-        }
+    private fun observePageLoadState() {
         lifecycleScope.launch {
             giphyAdapter.loadStateFlow.collectLatest { loadStates ->
                 binding.progressBar.isVisible = loadStates.refresh is LoadState.Loading
@@ -63,11 +58,21 @@ class GiphyFragment : Fragment(), GiphyPagerAdapter.GifItemClickListener {
         }
     }
 
+    private fun initializeList() {
+        binding.etSearch.requestFocus()
+        val gridLayoutManager = GridLayoutManager(requireContext(),2)
+        binding.rvGif.apply {
+            layoutManager = gridLayoutManager
+            adapter =  giphyAdapter.withLoadStateFooter(
+                footer = GiphyLoadAdapter(giphyAdapter::retry)
+            )
+        }
+    }
+
     private fun setListeners() {
 
         binding.etSearch.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                binding.etSearch.hideKeyboard()
                 performSearch()
                 return@OnEditorActionListener true
             }
@@ -78,9 +83,11 @@ class GiphyFragment : Fragment(), GiphyPagerAdapter.GifItemClickListener {
     private fun performSearch() {
         if (NetworkUtil.isNetworkConnected(requireContext())) {
             if (!binding.etSearch.text.isNullOrEmpty())
+                binding.etSearch.hideKeyboard()
                 lifecycleScope.launch {
                     viewModel.getGifs(searchKey = binding.etSearch.text.toString())
                         .collectLatest { giphyData ->
+                            Timber.d("$TAG: $giphyData")
                             giphyAdapter.submitData(giphyData)
                         }
                 }
@@ -92,5 +99,9 @@ class GiphyFragment : Fragment(), GiphyPagerAdapter.GifItemClickListener {
         val bundle = Bundle()
         bundle.putParcelable(GiphyDetailsFragment.IMAGE_DATA,imageData)
         findNavController().navigate(R.id.gifDetailsFragment,bundle)
+    }
+
+    companion object{
+        private val TAG = GiphyFragment::class.java.simpleName
     }
 }

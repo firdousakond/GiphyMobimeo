@@ -6,6 +6,7 @@ import com.giphy.mobimeo.data.model.ImageData
 import com.giphy.mobimeo.data.repository.GiphyRepository
 import com.giphy.mobimeo.util.API_KEY
 import com.giphy.mobimeo.util.PAGE_SIZE
+import timber.log.Timber
 import java.lang.Exception
 
 class GiphyPagingSource (private val gifRepository: GiphyRepository, private val searchKey: String) : PagingSource<Int, ImageData>() {
@@ -19,6 +20,7 @@ class GiphyPagingSource (private val gifRepository: GiphyRepository, private val
                     pageSize = PAGE_SIZE
                 )
                 val images  = response.data
+                Timber.d("$TAG: giphyResponse - ${images.toString()}")
                 val nextKey =
                     if (response.data?.isEmpty() == true) {
                         null
@@ -32,19 +34,12 @@ class GiphyPagingSource (private val gifRepository: GiphyRepository, private val
                 )
 
             } catch (exception: Exception) {
-                return LoadResult.Error(exception)
-            } catch (exception: Exception) {
+                Timber.e("$TAG: $exception")
                 return LoadResult.Error(exception)
             }
         }
 
-        /**
-         * The refresh key is used for subsequent calls to PagingSource.Load after the initial load.
-         */
         override fun getRefreshKey(state: PagingState<Int, ImageData>): Int? {
-            // We need to get the previous key (or next key if previous is null) of the page
-            // that was closest to the most recently accessed index.
-            // Anchor position is the most recently accessed index.
             return state.anchorPosition?.let { anchorPosition ->
                 state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                     ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
@@ -53,6 +48,7 @@ class GiphyPagingSource (private val gifRepository: GiphyRepository, private val
 
     companion object{
         private const val PAGE_INDEX = 0
+        private  val TAG = GiphyPagingSource::class.java.simpleName
     }
 
 }
